@@ -1,0 +1,22 @@
+---
+title: "BEE 4750/5750 Final Project"
+author: "Jason Shao, Steven Wu, Julia Gonzales"
+date: `j import Dates; Dates.Date(Dates.now())`
+weave_options:
+    term: false
+    results: tex
+    cache: off
+---
+
+<!-- This setups the environment and installs packages, but doesn't appear in the generated document -->
+<!-- You shouldn't need to modify this -->
+```julia; echo = false; results = "hidden"
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+```
+
+# Problem 
+
+# References
+
