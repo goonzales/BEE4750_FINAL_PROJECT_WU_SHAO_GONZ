@@ -24,14 +24,27 @@ p_min = [0,0,0]
 p_max = [36,28,1.2]
 varcost = [20.13,0,0]
 ramp = [108,28,1.2]
-demand = [0.674]
+#demand based on Cornell Energy dashboard from 8/15 to 12/4
+demand = [21.854,22.07,21.958,22.092,20.831,21.362,23.542,23.601,23.117,23.304,23.656,20.897,20.723,24.495
+,25.773,23.55,22.619,22.051,20.623,21.328,21.68,23.127,23.035,23.183,23.179,20.964,21.129,
+23.635,23.55,22.739,21.879,24.875,20.832,21.109,23.248,23.44,23.524,23.412,22.934,21.026,20.629,22.604,
+22.89,22.983,22.845,22.584,20.556,20.409,22.547,23.381,23.443,23.881,23.665,22.119,
+21.95,22.351,22.985,23.601,24.029,23.618,22.63,22.173,23.956,24.16,24.129,25.197,24.057,
+23.032,22.784,24.777,24.703,24.531,23.266,22.997,21.114,21.469,24.681,24.429,25.3,
+25.357,24.73,23.55,23.515,24.824,25.511,25.357,24.974,23.565,22.726,23.962,25.781,
+26.032,26.101,25.766,24.124,23.947,25.616,24.398,22.175,20.844,20.661,20.389,20.64,23.833,25.378,
+25.596,25.881,25.641,23.689,23.702,23.719]
 G = 1:length(generators)
+h = length(demand)
+T = 1:length(demand)
 
 #build model  
-cost_gen_ncampus = Model(HiGHS.Optimizer) 
-@variable(cost_gen_ncampus,p_min[g]<=y[g in G]<=p_max[g])
-@objective(cost_gen_ncampus,Min,sum(varcost.*y))
-@constraint(cost_gen_ncampus,load,sum(y)==demand)
+cost_gen_campus = Model(HiGHS.Optimizer) 
+@variable(cost_gen_campus,p_min[g]<=y[g in G,t in T]<=p_max[g])
+@objective(cost_gen_campus,Min,sum(varcost.*sum(y[:,t] for t in T)))
+@constraint(cost_gen_campus,load[t in T],sum(y[:,t])==demand[t])
+@constraint(cost_gen_campus,rampup[g in G,t in 1:h-1],y[g,t+1]-y[g,t]<=ramp[g])
+@constraint(cost_gen_campus,rampdown[g in G,t in 1:h-1],y[g,t]-y[g,t+1]<=ramp[g]
 
 ```
 
