@@ -17,6 +17,25 @@ Pkg.instantiate()
 ```
 
 # Problem 
+```julia
+#define variables
+generators = ["CHP","Solar","Hydro"]
+p_min = [0,0,0]
+p_max = [36,28,1.2]
+varcost = [20.13,0,0]
+ramp = [108,28,1.2]
+demand = [0.674]
+G = 1:length(generators)
+
+#build model  
+cost_gen_ncampus = Model(HiGHS.Optimizer) 
+@variable(cost_gen_ncampus,p_min[g]<=y[g in G]<=p_max[g])
+@objective(cost_gen_ncampus,Min,sum(varcost.*y))
+@constraint(cost_gen_ncampus,load,sum(y)==demand)
+
+```
+
+
 
 # References
 
