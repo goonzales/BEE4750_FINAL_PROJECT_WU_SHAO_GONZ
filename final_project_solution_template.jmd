@@ -19,6 +19,7 @@ Pkg.instantiate()
 # Part 1 - existing demand
 ```julia
 
+
 #define variables
 generators = ["CHP","Solar","Hydro"]
 p_min = [14.4,0,0]
@@ -41,7 +42,8 @@ cost_gen_campus = Model(HiGHS.Optimizer)
 @constraint(cost_gen_campus,load[t in T],sum(y[:,t])==demand[t])
 #solar capacity factors
 @constraint(cost_gen_campus,solarpower[t in T],y[2,t]<=p_max[2].*solarcf[t])
-#max powers
+#min/max powers
+#@constraint(cost_gen_campus,gasmin[t in T],p_min[1]<=y[1,t])
 @constraint(cost_gen_campus,hydromax[t in T],y[3,t]<=p_max[3])
 @constraint(cost_gen_campus,gasmax[t in T],y[1,t]<=p_max[1])
 #weak ramping constraints 
@@ -51,6 +53,7 @@ cost_gen_campus = Model(HiGHS.Optimizer)
 optimize!(cost_gen_campus)
 gen = value.(y).data
 
+p = plot(gen',xlabel="Day",ylabel="Generated Electricity (MW)",label=permutedims(generators),title="Generation Based on 2020 Data")
 
 ```
 
