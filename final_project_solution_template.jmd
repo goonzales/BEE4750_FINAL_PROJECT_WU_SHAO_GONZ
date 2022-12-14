@@ -230,8 +230,8 @@ optimize!(newrenewables)
 genold = value.(yo).data
 gennew = value.(yn).data
 newbuilt = value.(xn).data
-p2=areaplot(genold',labels=permutedims(generatorsold))
-areaplot!(gennew',labels=permutedims(generatorsnew))
+
+p2=areaplot((vcat(genold,gennew))',labels=permutedims(vcat(generatorsold,generatorsnew)))
 scatter!(demand, label="Demand(MW)", ylabel="Stacked Generated Electricity (MW)", xlabel="Day",title="Generation and Demand Based on 2020 Data")
 
 ```
@@ -280,8 +280,7 @@ gennew = value.(yn).data
 newbuilt = value.(xn).data
 
 
-p2=areaplot(genold',labels=permutedims(generatorsold))
-areaplot!(gennew',labels=permutedims(generatorsnew))
+p2=areaplot((vcat(genold,gennew))',labels=permutedims(vcat(generatorsold,generatorsnew)))
 scatter!(demand, label="Demand(MW)", ylabel="Stacked Generated Electricity (MW)", xlabel="Day",title="Generation and Demand Based on 2020 Data")
 ```
 
